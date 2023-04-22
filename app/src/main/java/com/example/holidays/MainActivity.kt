@@ -3,6 +3,7 @@ package com.example.holidays
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Parcelable
 import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,6 +31,30 @@ class MainActivity : AppCompatActivity() {
 
         fetchDataFromApi()
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelable("recyclerViewState",binding.holidayRecycler.layoutManager?.onSaveInstanceState())
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        val savedRecyclerState: Parcelable? = savedInstanceState.getParcelable("recyclerViewState")
+        binding.holidayRecycler.layoutManager?.onRestoreInstanceState(savedRecyclerState)
+    }
+
+    /*override fun onPause() {
+        super.onPause()
+        mBundleRecyclerState = Bundle()
+        val listState: Parcelable? = binding.holidayRecycler.layoutManager?.onSaveInstanceState()
+        mBundleRecyclerState.putParcelable(KEY_RECYCLER_STATE, listState)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val listState: Parcelable? = mBundleRecyclerState.getParcelable(KEY_RECYCLER_STATE)
+        binding.holidayRecycler.layoutManager?.onRestoreInstanceState(listState)
+    }*/
 
     // Function to retrieve data from API
     private fun fetchDataFromApi() {
